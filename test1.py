@@ -96,7 +96,7 @@ uploaded = st.sidebar.file_uploader("Upload Excel", type=["xlsx"])
 if uploaded:
     df = pd.read_excel(uploaded, engine="openpyxl")
 else:
-    # Fallback mock data
+    # Fallback mock data if no file uploaded
     df = pd.DataFrame({
         "LoanType": ["Retail", "SME", "Industry"],
         "EAD": [500, 400, 300],
@@ -104,6 +104,13 @@ else:
         "PD": [0.02, 0.05, 0.10],
         "LGD": [0.45, 0.40, 0.35]
     })
+
+# Ensure calculated fields exist
+if "Calculated_RWA" not in df.columns:
+    df["Estimated_RW"] = df["PD"].apply(lambda p: 0.30 if p < 0.20 else (0.50 if p < 0.50 else 0.75))
+    df["Calculated_RWA"] = df["EAD"] * df["Estimated_RW"]
+    df["RWA_Difference"] = df["Calculated_RWA"] - df.get("RWA", 0)
+    df["RWA_Delta_%"] = (df["RWA_Difference"] / df["RWA"].replace(0, np.nan)) * 100
 
 
 # Common references for visuals

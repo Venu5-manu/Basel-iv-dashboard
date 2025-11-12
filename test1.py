@@ -101,7 +101,7 @@ product_col = "LoanType" if "LoanType" in df.columns else None
 # =========================
 # RETAIL / LTV / CRM MODULE
 # =========================
-if selected_opt.startswith("Retail mortgage"):
+if selected_opt.startswith("Retail Lending"):
     st.header("Retail mortgage, consumer, auto finance, LTV, collateral, netting, Basel IV band allocation")
 
     # ---- Sidebar Filters (short labels) ----

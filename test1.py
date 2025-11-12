@@ -3,6 +3,14 @@ import pandas as pd
 # import plotly.express as px
 import numpy as np
 
+
+import os
+file_path = "sample.xlsx"
+if os.path.exists(file_path):
+    df = pd.read_excel(file_path, engine="openpyxl")
+else:
+    st.error("Missing sample.xlsx — please upload your dataset.")
+
 # =========================
 # UI SETUP
 # =========================

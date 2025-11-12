@@ -1,10 +1,7 @@
 import streamlit as st
 import pandas as pd
-# import plotly.express as px
+import plotly.express as px
 import numpy as np
-
-
-
 
 # =========================
 # UI SETUP
@@ -95,13 +92,27 @@ def load_and_prepare(uploaded_file=None):
 # uploaded = st.sidebar.file_uploader("Upload Excel", type=["xlsx"])
 # df = load_and_prepare(uploaded)
 
+uploaded = st.sidebar.file_uploader("Upload Excel", type=["xlsx"])
+if uploaded:
+    df = pd.read_excel(uploaded, engine="openpyxl")
+else:
+    # Fallback mock data
+    df = pd.DataFrame({
+        "LoanType": ["Retail", "SME", "Industry"],
+        "EAD": [500, 400, 300],
+        "RWA": [200, 150, 100],
+        "PD": [0.02, 0.05, 0.10],
+        "LGD": [0.45, 0.40, 0.35]
+    })
+
+
 # Common references for visuals
 product_col = "LoanType" if "LoanType" in df.columns else None
 
 # =========================
 # RETAIL / LTV / CRM MODULE
 # =========================
-if selected_opt.startswith("Retail Lending"):
+if selected_short == "Retail/LTV/CRM":
     st.header("Retail mortgage, consumer, auto finance, LTV, collateral, netting, Basel IV band allocation")
 
     # ---- Sidebar Filters (short labels) ----
@@ -392,7 +403,7 @@ if selected_opt.startswith("Retail Lending"):
 # =========================
 # OTHER MODULE HEADERS (placeholders)
 # =========================
-elif selected_opt.startswith("Check of Credit Card"):
+elif selected_short == "CRR3 Cards":
     st.header("Credit Card CRR3 Treatment")
     # =========================================================
     # CREDIT CARD CRR3 TREATMENT — QRRE / SME / CORPORATE
